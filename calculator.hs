@@ -14,6 +14,8 @@ targetRecipe = 1!Recycler
 craftlist =
     [ (BatBox, 1!CopperWire +++ 3!Battery)
     , (CopperWire, 0.5!Copper +++ 1!Rubber)
+    , (GoldWire, (12.0/3.0)!Gold +++ 4!Rubber)
+    , (IronWire, (12.0/3.0)!RefinedIron +++ 4!Rubber)
     , (NuclearReactor, 3!ReactorChamber +++ 1!Generator +++ 1!AdvCircuit)
     , (AdvCircuit, 4!Redstone +++ 2!Glowstone +++ 2!Lapis +++ 1!Circuit)
     , (Circuit, 6!CopperWire +++ 2!Redstone +++ 1!RefinedIron)
@@ -44,6 +46,17 @@ craftlist =
     , (Bronze, (3/2.0)!Copper +++ (1/2.0)!Tin)
     , (Compressor, 1!Machine +++ 6!Cobblestone +++ 1!Circuit)
     , (Recycler, 1!Compressor +++ 1!Glowstone +++ 1!RefinedIron)
+-- solar array stuff
+    , (Glass, 1!Sand)
+    , (LVTransformer, 3!Copper +++ 4!WoodPlank +++ 2CopperWire)
+    , (WoodPlank, (1.0/4.0)!Wood)
+    , (MVTransformer, 1!Machine +++ 2!GoldWire)
+    , (HVTransformer, 1!MVTransformer +++ 1!Circuit +++ 1!EnergyCrystal +++ 2!IronWire)
+    , (EnergyCrystal, 1!Diamond +++ 8Redstone)
+    , (SolarPanel, 3!CoalDust +++ 3!Glass +++ 2!Circuit +++ 1!Generator)
+    , (LVSolarArray, 8!SolarPanel, 1!LVTransformer)
+    , (MVSolarArray, 8!LVSolarArray, 1!MVTransformer)
+    , (HVSolaryArray, 8!MVSolarArray, 1!HVTransformer)
     ]
 
 -- Add new blocks here
@@ -58,8 +71,14 @@ data Block = Iron
            | Diamond
            | Lapis
            | Coal
+           | Sand
+           | Wood
            -- Tier 1 crafts
+           | WoodPlank
+           | Glass
            | CopperWire
+           | GoldWire
+           | IronWinre
            | RefinedIron
            | DensePlate
            | Machine
@@ -80,9 +99,13 @@ data Block = Iron
            | AdvCircuit
            | AdvAlloy
            | Generator
+           | EnergyCrystal
            | LapotronCrystal
            | Compressor
            -- Tier 4+ crafts
+           | HVTransformer
+           | MVTransformer
+           | LVTransformer
            | AdvMachine
            | Recycler
            | MassFabricator
@@ -102,6 +125,11 @@ data Block = Iron
            | IronStack
            | CobbleStack
            | TinStack
+           -- Solar Arrays
+           | HVSolarArray
+           | MVSolarArray
+           | LVSolarArray
+           | SolarPanel
            deriving (Show, Eq, Ord)
 
 type Basket = Map Block Float
