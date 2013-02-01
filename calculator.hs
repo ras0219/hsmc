@@ -14,8 +14,8 @@ targetRecipe = 1!Recycler
 craftlist =
     [ (BatBox, 1!CopperWire +++ 3!Battery)
     , (CopperWire, 0.5!Copper +++ 1!Rubber)
-    , (GoldWire, (12.0/3.0)!Gold +++ 4!Rubber)
-    , (IronWire, (12.0/3.0)!RefinedIron +++ 4!Rubber)
+    , (GoldWire, (12.0/3.0)!Gold +++ 2!Rubber)
+    , (IronWire, (12.0/3.0)!RefinedIron +++ 3!Rubber)
     , (NuclearReactor, 3!ReactorChamber +++ 1!Generator +++ 1!AdvCircuit)
     , (AdvCircuit, 4!Redstone +++ 2!Glowstone +++ 2!Lapis +++ 1!Circuit)
     , (Circuit, 6!CopperWire +++ 2!Redstone +++ 1!RefinedIron)
