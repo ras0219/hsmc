@@ -48,15 +48,15 @@ craftlist =
     , (Recycler, 1!Compressor +++ 1!Glowstone +++ 1!RefinedIron)
 -- solar array stuff
     , (Glass, 1!Sand)
-    , (LVTransformer, 3!Copper +++ 4!WoodPlank +++ 2CopperWire)
+    , (LVTransformer, 3!Copper +++ 4!WoodPlank +++ 2!CopperWire)
     , (WoodPlank, (1.0/4.0)!Wood)
     , (MVTransformer, 1!Machine +++ 2!GoldWire)
     , (HVTransformer, 1!MVTransformer +++ 1!Circuit +++ 1!EnergyCrystal +++ 2!IronWire)
-    , (EnergyCrystal, 1!Diamond +++ 8Redstone)
+    , (EnergyCrystal, 1!Diamond +++ 8!Redstone)
     , (SolarPanel, 3!CoalDust +++ 3!Glass +++ 2!Circuit +++ 1!Generator)
-    , (LVSolarArray, 8!SolarPanel, 1!LVTransformer)
-    , (MVSolarArray, 8!LVSolarArray, 1!MVTransformer)
-    , (HVSolaryArray, 8!MVSolarArray, 1!HVTransformer)
+    , (LVSolarArray, 8!SolarPanel +++ 1!LVTransformer)
+    , (MVSolarArray, 8!LVSolarArray +++ 1!MVTransformer)
+    , (HVSolarArray, 8!MVSolarArray +++ 1!HVTransformer)
     ]
 
 -- Add new blocks here
@@ -78,7 +78,7 @@ data Block = Iron
            | Glass
            | CopperWire
            | GoldWire
-           | IronWinre
+           | IronWire
            | RefinedIron
            | DensePlate
            | Machine
@@ -99,7 +99,6 @@ data Block = Iron
            | AdvCircuit
            | AdvAlloy
            | Generator
-           | EnergyCrystal
            | LapotronCrystal
            | Compressor
            -- Tier 4+ crafts
