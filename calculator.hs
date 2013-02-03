@@ -1,14 +1,30 @@
 import Data.Map (Map, empty, fromList, unionWith, foldrWithKey, findWithDefault)
 import qualified Data.Map as M
 import Data.List (maximumBy, intersperse, sort, filter)
+import System
 
 -- Usage
 --
 -- Change the target recipe here:
---targetRecipe = 5!OCHeatVent +++ 2!ComponentHeatVent +++ 2!ComponentHeatExchanger
-targetRecipe = 1!Recycler
+-- targetRecipe = 5!OCHeatVent +++ 2!ComponentHeatVent +++ 2!ComponentHeatExchanger
+--               +++ (-1)!DensePlate +++ (-1)!Circuit +++ (-4)!CopperWire
+-- targetRecipe = 1!Recycler
 --
 --
+
+parseArgsRecipe :: [String] -> Basket
+parseArgsRecipe [] = empty
+parseArgsRecipe (x:xs) = M.insert (read x) 1.0 $ parseArgsRecipe xs
+
+main = do
+  lines <- getArgs
+  let targetRecipe = parseArgsRecipe lines
+      r = reduce tech targetRecipe
+      (i, p) = partitionBasket r
+  putStrLn "Ingredients\n==========="
+  putStrLn $ prettyPrint i
+  putStrLn "\nProcess\n======="
+  putStrLn $ prettyPrint p
 
 -- Add new recipes here
 craftlist =
@@ -129,7 +145,7 @@ data Block = Iron
            | MVSolarArray
            | LVSolarArray
            | SolarPanel
-           deriving (Show, Eq, Ord)
+           deriving (Show, Eq, Ord, Read)
 
 type Basket = Map Block Float
 type Tech = Map Block Basket
@@ -178,14 +194,6 @@ reduce' t b = foldrWithKey (reduce'' t) empty b
 
 reduce'' :: Tech -> Block -> Float -> Basket -> Basket
 reduce'' t b f a = (techtrans t b f) +++ a
-
-main = do
-  putStrLn "Ingredients\n==========="
-  putStrLn $ prettyPrint i
-  putStrLn "\nProcess\n======="
-  putStrLn $ prettyPrint p
-    where r = reduce tech targetRecipe
-          (i, p) = partitionBasket r
 
 
 -- Filter baskets
