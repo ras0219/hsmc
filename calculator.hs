@@ -1,7 +1,7 @@
 import Data.Map (Map, empty, fromList, unionWith, foldrWithKey, findWithDefault)
 import qualified Data.Map as M
 import Data.List (maximumBy, intersperse, sort, filter)
-import System
+import System.Environment (getArgs)
 
 -- Usage
 --
