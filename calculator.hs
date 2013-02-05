@@ -73,6 +73,10 @@ craftlist =
     , (LVSolarArray, 8!SolarPanel +++ 1!LVTransformer)
     , (MVSolarArray, 8!LVSolarArray +++ 1!MVTransformer)
     , (HVSolarArray, 8!MVSolarArray +++ 1!HVTransformer)
+-- blue powerrrrrr
+    , (BlueAlloy, 4!Nikolite +++ 1!Silver)
+    , (BTBattery, 6!Nikolite +++ 1!Tin +++ 2!Copper)
+    , (BatteryBox, 4!BTBattery +++ 3!Iron +++ 1!BlueAlloy +++ 1!WoodPlank)
     ]
 
 -- Add new blocks here
@@ -89,6 +93,8 @@ data Block = Iron
            | Coal
            | Sand
            | Wood
+           | Silver
+           | Nikolite
            -- Tier 1 crafts
            | WoodPlank
            | Glass
@@ -103,7 +109,9 @@ data Block = Iron
            | EnergyCrystal
            | CoalDust
            | Bronze
+           | BlueAlloy
            -- Tier 2 crafts
+           | BTBattery
            | MixedIngot
            | Circuit
            | BatBox
@@ -111,6 +119,7 @@ data Block = Iron
            | CarbonFiber
            | CarbonMesh
            -- Tier 3 crafts
+           | BatteryBox
            | CarbonPlate
            | AdvCircuit
            | AdvAlloy
