@@ -1,4 +1,5 @@
-all: calculator
+all: calculator gtcalculator
 
-calculator: calculator.hs
-	ghc --make calculator.hs
+%: %.hs
+	ghc --make $<
+
