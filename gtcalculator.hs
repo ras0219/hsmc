@@ -4,19 +4,10 @@ import Data.List (maximumBy, intersperse, sort, filter)
 import System.Environment (getArgs)
 import Text.Printf
 
--- Usage
---
--- Change the target recipe here:
--- targetRecipe = 5!OCHeatVent +++ 2!ComponentHeatVent +++ 2!ComponentHeatExchanger
---               +++ (-1)!DensePlate +++ (-1)!Circuit +++ (-4)!CopperWire
--- targetRecipe = 1!Recycler
---
---
-
 parseArgsRecipe :: [String] -> Basket
 parseArgsRecipe [] = empty
 parseArgsRecipe (n:x:xs) = M.insert item amt' basket
-  where item = read x
+  where item = Block x
         basket = parseArgsRecipe xs
         amt = read n
         amt' = case M.lookup item basket
@@ -25,6 +16,9 @@ parseArgsRecipe (n:x:xs) = M.insert item amt' basket
 
 main = do
   lines <- getArgs
+  if length lines == 0
+    then fail "Called calculator with no arguments"
+    else return ()
   let targetRecipe = parseArgsRecipe lines
       r = reduce tech targetRecipe
       (i, p) = partitionBasket r
@@ -37,137 +31,148 @@ main = do
 craftlist =
     [
       -- Vanilla
-      (Furnace, 8!Cobblestone)
-    , (IronBar, (6.0/16.0)!Iron)
-    , (WoodPlank, (1.0/4.0)!Wood)
-    , (Glass, 1!Sand)
+      ("Furnace", [(8, "Cobblestone")])
+    , ("IronBar", [(6.0/16.0, "Iron")])
+    , ("WoodPlank", [(1.0/4.0, "Wood")])
+    , ("Glass", [(1, "Sand")])
       -- IC2 Low Level
-    , (RefinedIron, 1!Iron)
-    , (Machine, 8!RefinedIron)
-    , (Battery, 1!CopperWire +++ 2!Redstone +++ 4!Tin)
-    , (Generator, 1!Machine +++ 1!Battery +++ 1!Furnace)
-    , (BatBox, 1!CopperWire +++ 3!Battery)
-    , (CopperWire, 0.5!Copper +++ 1!Rubber)
-    , (IronWire, (12.0/3.0)!RefinedIron +++ 3!Rubber)
-    , (GoldWire, (12.0/3.0)!Gold +++ 2!Rubber)
-    , (Circuit, 6!CopperWire +++ 2!Redstone +++ 1!RefinedIron)
-    , (AdvCircuit, 4!Redstone +++ 2!Glowstone +++ 2!Lapis +++ 1!Circuit)
-    , (CoalDust, 1!Coal)
-    , (Bronze, (3/2.0)!Copper +++ (1/2.0)!Tin)
+    , ("RefinedIron", [(1, "Iron")])
+    , ("Machine", [(8, "RefinedIron")])
+    , ("Battery", [(1, "CopperWire"),
+                   (2, "Redstone"),
+                   (4, "Tin")])
+    , ("Generator", [(1, "Machine"),
+                     (1, "Battery"),
+                     (1, "Furnace")])
+    , ("BatBox", [(1, "CopperWire"),
+                  (3, "Battery")])
+    , ("CopperWire", [(3.0/6.0, "Copper"),
+                      (6.0/6.0, "Rubber")])
+    , ("IronWire", [(3.0/12.0, "RefinedIron"),
+                    (36.0/12.0, "Rubber")])
+    , ("GoldWire", [(1.0/4.0, "Gold"),
+                    (8.0/4.0, "Rubber")])
+    , ("GlassFibre", [(6.0/6.0, "Glass"),
+                      (2.0/6.0, "Silver"),
+                      (1.0/6.0, "Diamond")])
+    , ("Circuit", [(6, "CopperWire"),
+                   (2, "Redstone"),
+                   (1, "RefinedIron")])
+    , ("AdvCircuit", [(4, "Redstone"),
+                      (2, "Glowstone"),
+                      (2, "Lapis"),
+                      (1, "Circuit")])
+    , ("CoalDust", [(1, "Coal")])
+    , ("Bronze", [(3/2.0, "Copper"),
+                  (1/2.0, "Tin")])
+    , ("10kCoolant", [(4, "Tin"),
+                      (1, "Cell")])
+    , ("Overclocker", [(3, "10kCoolant"),
+                       (2, "CopperWire"),
+                       (1, "AdvCircuit")])
       -- Nuclear subcomponents
-    , (MixedIngot, (3/2.0)!RefinedIron +++ (3/2.0)!Bronze +++ (3/2.0)!Tin)
-    , (AdvAlloy, 1!MixedIngot)
-    , (CarbonPlate, 1!CarbonMesh)
-    , (CarbonMesh, 2!CarbonFiber)
-    , (CarbonFiber, 4!CoalDust)
-    , (DensePlate, 8!Copper)
-    , (AdvMachine, 2!AdvAlloy +++ 1!Machine +++ 2!CarbonPlate)
-    , (LapotronCrystal, 2!Circuit +++ 6!Lapis +++ 1!Sapphire)
-    , (EnergyCrystal, 1!Ruby +++ 8!Redstone)
+    , ("MixedIngot", [(3/2.0, "RefinedIron"),
+                      (3/2.0, "Bronze"),
+                      (3/2.0, "Tin")])
+    , ("AdvAlloy", [(1, "MixedIngot")])
+    , ("CarbonPlate", [(1, "CarbonMesh")])
+    , ("CarbonMesh", [(2, "CarbonFiber")])
+    , ("CarbonFiber", [(4, "CoalDust")])
+    , ("DensePlate", [(8, "Copper")])
+    , ("AdvMachine", [(2, "AdvAlloy"),
+                      (1, "Machine"),
+                      (2, "CarbonPlate")])
+    , ("LapotronCrystal", [(2, "Circuit"),
+                           (6, "Lapis"),
+                           (1, "Sapphire")])
+    , ("EnergyCrystal", [(1, "Ruby"),
+                         (8, "Redstone")])
       -- Nuclear components
-    , (NuclearReactor, 3!ReactorChamber +++ 1!Generator +++ 1!AdvCircuit)
-    , (ReactorChamber, 4!DensePlate +++ 1!Machine)
-    , (OCHeatVent, 1!ReactorHeatVent +++ 2!Gold)
-    , (ReactorHeatVent, 1!HeatVent +++ 2!DensePlate)
-    , (ComponentHeatVent, 1!HeatVent +++ 4!Tin +++ 4!IronBar)
-    , (HeatVent, 4!RefinedIron +++ 4!IronBar)
-    , (ComponentHeatExchanger, 1!HeatExchanger +++ 4!Gold)
-    , (HeatExchanger, 1!DensePlate +++ 1!Circuit +++ 3!Tin)
+    , ("NuclearReactor", [(3, "ReactorChamber"),
+                          (1, "Generator"),
+                          (1, "AdvCircuit")])
+    , ("ReactorChamber", [(4, "DensePlate"),
+                          (1, "Machine")])
+    , ("OCHeatVent", [(1, "ReactorHeatVent"),
+                      (2, "Gold")])
+    , ("AdvHeatVent", [(6, "IronBar"),
+                       (1, "Diamond"),
+                       (2, "HeatVent")])
+    , ("ReactorHeatVent", [(1, "HeatVent"),
+                           (2, "DensePlate")])
+    , ("ComponentHeatVent", [(1, "HeatVent"),
+                             (4, "Tin"),
+                             (4, "IronBar")])
+    , ("HeatVent", [(4, "RefinedIron"),
+                    (4, "IronBar")])
+    , ("ComponentHeatExchanger", [(1, "HeatExchanger"),
+                                  (4, "Gold")])
+    , ("HeatExchanger", [(1, "DensePlate"),
+                         (1, "Circuit"),
+                         (3, "Tin")])
       -- High level machines
-    , (Compressor, 1!Machine +++ 6!Cobblestone +++ 1!Circuit)
-    , (Recycler, 1!Compressor +++ 1!Glowstone +++ 1!RefinedIron)
+    , ("Compressor", [(1, "Machine"),
+                      (6, "Cobblestone"),
+                      (1, "Circuit")])
+    , ("Recycler", [(1, "Compressor"),
+                    (1, "Glowstone"),
+                    (1, "RefinedIron")])
       -- solar array stuff
-    , (LVTransformer, 3!Copper +++ 4!WoodPlank +++ 2!CopperWire)
-    , (MVTransformer, 1!Machine +++ 2!GoldWire)
-    , (HVTransformer, 1!MVTransformer +++ 1!Circuit +++ 1!EnergyCrystal +++ 2!IronWire)
-    , (SiliconPlate, 2!Silicon)
-    , (SolarPanel, 1!CarbonPlate +++ 3!GlassPane +++
-                   2!Circuit +++ 1!Generator +++ 2!SiliconPlate)
+    , ("LVTransformer", [(3, "Copper"),
+                         (4, "WoodPlank"),
+                         (2, "CopperWire")])
+    , ("MVTransformer", [(1, "Machine"),
+                         (2, "GoldWire")])
+    , ("HVTransformer", [(1, "MVTransformer"),
+                         (1, "Circuit"),
+                         (1, "EnergyCrystal"),
+                         (2, "IronWire")])
+    , ("SiliconPlate", [(2, "Silicon")])
+    , ("SolarPanel", [(1, "CarbonPlate"),
+                      (3, "GlassPane"),
+                      (2, "Circuit"),
+                      (1, "Generator"),
+                      (2, "SiliconPlate")])
+      -- Graviplate Shenans
+    , ("BoosterEngine", [(2, "Glowstone"),
+                         (3, "AdvAlloy"),
+                         (2, "AdvCircuit"),
+                         (1, "Overclocker"),
+                         (1, "AdvHeatVent")])
+    , ("Jetpack", [(2, "Glowstone"),
+                   (1, "BatBox"),
+                   (4, "RefinedIron"),
+                   (1, "AdvCircuit")])
+    , ("AdvJetpack", [(2, "BoosterEngine"),
+                      (1, "Jetpack"),
+                      (2, "CarbonPlate"),
+                      (2, "GlassFibre"),
+                      (1, "AdvLappack"),
+                      (1, "AdvCircuit")])
+    , ("AdvLappack", [(1, "Lappack"),
+                      (1, "LapotronCrystal"),
+                      (1, "AdvCircuit")])
+    , ("Lappack", [(1, "Batpack"),
+                   (54, "Lapis"),
+                   (1, "AdvCircuit")])
+    , ("Batpack", [(6, "Battery"),
+                   (1, "Circuit"),
+                   (1, "Tin")])
       -- blue powerrrrrr
-    , (BlueAlloy, 4!Nikolite +++ 1!Silver)
-    , (BTBattery, 6!Nikolite +++ 1!Tin +++ 2!Copper)
-    , (BatteryBox, 4!BTBattery +++ 3!Iron +++ 1!BlueAlloy +++ 1!WoodPlank)
+    , ("BlueAlloy", [(4, "Nikolite"),
+                     (1, "Silver")])
+    , ("BTBattery", [(6, "Nikolite"),
+                     (1, "Tin"),
+                     (2, "Copper")])
+    , ("BatteryBox", [(4, "BTBattery"),
+                      (3, "Iron"),
+                      (1, "BlueAlloy"),
+                      (1, "WoodPlank")])
     ]
 
 -- Add new blocks here
-data Block = Iron
-           | Copper
-           | Rubber
-           | Tin
-           | Cobblestone
-           | Glowstone
-           | Redstone
-           | Gold
-           | Diamond
-           | Lapis
-           | Coal
-           | Sand
-           | Wood
-           | Silver
-           | Nikolite
-           | Sapphire
-           | Ruby
-           -- Tier 1 crafts
-           | WoodPlank
-           | Glass
-           | Furnace
-           | IronBar
-           | CopperWire
-           | GoldWire
-           | IronWire
-           | DensePlate
-           | RefinedIron
-           | Machine
-           | EnergyCrystal
-           | CoalDust
-           | Bronze
-           | BlueAlloy
-           | Silicon
-           -- Tier 2 crafts
-           | BTBattery
-           | MixedIngot
-           | Circuit
-           | BatBox
-           | Battery
-           | CarbonFiber
-           | CarbonMesh
-           | SiliconPlate
-           -- Tier 3 crafts
-           | BatteryBox
-           | CarbonPlate
-           | AdvCircuit
-           | AdvAlloy
-           | Generator
-           | LapotronCrystal
-           | Compressor
-           -- Tier 4+ crafts
-           | HVTransformer
-           | MVTransformer
-           | LVTransformer
-           | AdvMachine
-           | Recycler
-           | MassFabricator
-           -- Nuclear crafts
-           | ReactorChamber
-           | NuclearReactor
-           | HeatVent
-           | ReactorHeatVent
-           | OCHeatVent
-           | ComponentHeatVent
-           | HeatExchanger
-           | ComponentHeatExchanger
-           -- Meta ingredient to track process steps
+data Block = Block String
            | Craft Block
-           -- Stacks for calculating reduced costs
-           | CopperStack
-           | IronStack
-           | CobbleStack
-           | TinStack
-           -- Solar Arrays
-           | SolarPanel
-           | LVSolarArray
-           | MVSolarArray
-           | HVSolarArray
            deriving (Show, Eq, Ord, Read)
 
 type Basket = Map Block Float
@@ -187,19 +192,24 @@ b1 *** x = M.map (*x) b1
 (!) :: Float -> Block -> Basket
 (!) f b = fromList [(b, f)]
 
+addProcessSimple :: [(String, [(Float, String)])] -> [(Block, Basket)]
+addProcessSimple l = addProcess $ map trans l
+  where trans (n, b) = (Block n, fromList $ map f b)
+        f (i, s) = (Block s, i)
+
 addProcess :: [(Block, Basket)] -> [(Block, Basket)]
 addProcess = map plusCraft
     where plusCraft (b, k) = (b, k +++ 1!(Craft b))
 
 stacktech =
-  [ (Copper, (1/64.0)!CopperStack)
-  , (Iron, (1/64.0)!IronStack)
-  , (Cobblestone, (1/64.0)!CobbleStack)
-  , (Tin, (1/64.0)!TinStack)
+  [ (Block "Copper", (1/64.0)!Block "CopperStack")
+  , (Block "Iron", (1/64.0)!Block "IronStack")
+  , (Block "Cobblestone", (1/64.0)!Block "CobbleStack")
+  , (Block "Tin", (1/64.0)!Block "TinStack")
   ]
 
 tech :: Tech
-tech = fromList $ addProcess craftlist
+tech = fromList $ addProcessSimple craftlist
 
 techtrans :: Tech -> Block -> Float -> Basket
 techtrans t b f = (findWithDefault (fromList [(b, 1.0)]) b t) *** f
