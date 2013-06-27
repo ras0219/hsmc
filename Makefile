@@ -1,4 +1,4 @@
-all: calculator gtcalculator
+all: calculator gtcalculator thaumcraft
 
 %: %.hs
 	ghc --make $<

@@ -181,6 +181,39 @@ craftlist =
     , ("IridiumAlloyIngot", [(4, "Iridium"),
                              (4, "AdvAlloy"),
                              (1, "Diamond")])
+      -- Applied Energistics
+    , ("CraftingCPU", [(2, "QuartzCrystal"),
+                       (4, "Iron"),
+                       (2, "Glowstone"),
+                       (1, "AdvancedProcessor")])
+    , ("AdvancedProcessor", [(1, "Diamond"),
+                             (2, "Redstone"),
+                             (1, "QuartzDust")])
+    , ("BasicProcessor", [(1, "Gold"),
+                          (2, "Redstone"),
+                          (1, "QuartzDust")])
+    , ("PatternProvider", [(2, "ConversionMatrix"),
+                           (1, "AdvancedProcessor"),
+                           (4, "Iron"),
+                           (1, "StorageCell"),
+                           (1, "CraftingTable")])
+    , ("AssemblerWall", [(1, "QuartzCrystal"),
+                         (4, "Gold"),
+                         (4, "Iron")])
+    , ("MEHeatVent", [(1, "MECable"),
+                      (4, "Iron"),
+                      (4, "IronBar")])
+    , ("MECable", [(2, "Redstone"),
+                   (1, "QuartzFiber")])
+    , ("QuartzFiber", [(3/4.0, "QuartzDust"),
+                       (6/4.0, "Glass")])
+    , ("StorageCell", [(4, "QuartzCrystal"),
+                       (4, "Redstone"),
+                       (1, "BasicProcessor")])
+    , ("ConversionMatrix", [(2, "QuartzCrystal"),
+                            (1, "BasicProcessor"),
+                            (4, "Iron"),
+                            (2, "Redstone")])
       -- blue powerrrrrr
     , ("BlueAlloy", [(4, "Nikolite"),
                      (1, "Silver")])
