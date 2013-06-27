@@ -158,6 +158,29 @@ craftlist =
     , ("Batpack", [(6, "Battery"),
                    (1, "Circuit"),
                    (1, "Tin")])
+      -- Gregtech Matter Fab stuff
+    , ("MatterFabricator", [(2, "HighlyAdvMachine"),
+                            (2, "Teleporter"),
+                            (4, "EnergyFlowCircuit"),
+                            (1, "LapotronicEnergyOrb")])
+    , ("HighlyAdvMachine", [(1, "AdvMachine"),
+                            (4, "Titanium"),
+                            (4, "Chrome")])
+    , ("Teleporter", [(4, "AdvCircuit"),
+                      (1, "FreqTransmitter"),
+                      (2, "GlassFibre"),
+                      (1, "AdvMachine"),
+                      (1, "Diamond")])
+    , ("LapotronicEnergyOrb", [(8, "LapotronCrystal"),
+                               (1, "IridiumPlate")])
+    , ("EnergyFlowCircuit", [(1, "Platinum"),
+                             (1, "AdvCircuit"),
+                             (1, "LapotronCrystal")])
+    , ("IridiumPlate", [(1, "IridiumAlloyIngot"),
+                        (8, "IndustrialTNT")])
+    , ("IridiumAlloyIngot", [(4, "Iridium"),
+                             (4, "AdvAlloy"),
+                             (1, "Diamond")])
       -- blue powerrrrrr
     , ("BlueAlloy", [(4, "Nikolite"),
                      (1, "Silver")])
